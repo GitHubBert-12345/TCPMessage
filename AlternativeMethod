@@ -1,0 +1,21 @@
+pvMessage = "test test test"
+
+local function consumer(consume)
+   local a = consume()
+   local b = consume()
+   local c = consume()
+   VSLog (a .. b .. c)
+   return consumer(consume)
+end
+
+function consumer(consume)
+   VSLog (consume()..consume()..consume())
+   return consumer(consume)
+end
+
+local process = coroutine.wrap(consumer)
+process(coroutine.yield)
+
+process(pvMessage)
+process(pvMessage)
+process(pvMessage)
