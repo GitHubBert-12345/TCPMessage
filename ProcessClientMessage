@@ -1,0 +1,28 @@
+buffer = {}
+function ProcessClientMessage(pvClientIP, pvMessage)
+  if #buffer < 3 then
+    table.insert(buffer, pvMessage)
+   --VSLog(table.concat(buffer, ""))
+   Temp = (table.concat(buffer, ""))
+   CurrentMessage = EnviroRead ("Message")
+   NewMessage = CurrentMessage .. Temp
+       EnviroWrite ("Message" , NewMessage)
+       if string.find(NewMessage, "ISSClip%=") then
+           if string.find(NewMessage, "NextDiver%=") then
+               if string.find(NewMessage, "PreviousDiver%=") then
+                   EnviroWrite ("MessageComplete", NewMessage)
+                   --VSLog ("MessageComplete has been written")
+                   ShowMessage ()
+                   EnviroWrite ("Message", " ")
+               end
+           end
+       end
+  end
+end
+
+function ShowMessage ()
+ VSLog (EnviroRead ("MessageComplete"))
+ Sleep (10000)
+ EnviroWrite ("MessageComplete", " ")
+ CLS()
+end
